@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>SafePaws</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <h1>Safepaws</h1>
+        <ul id="location-list"></ul>
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const loginResponse = await fetch('https://safepaws.theportal.gr/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: "test@theportal.gr",
+                        password: "test12345678"
+                    })
+                });
+                const data = await loginResponse.json();
+                console.log("authentication response",data);
+                const token = data.data.access_token;
+
+                const locationResponse = await fetch('https://safepaws.theportal.gr/api/v1/location', {
+                    method: 'GET',
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+                const locations = await locationResponse.json();
+                console.log("locations response",locations);
+                const list = document.getElementById("location-list");
+                locations.data.forEach(location => {
+                    const li = document.createElement("li");
+
+                    function showCollapsed() {
+                        li.textContent = location.name;
+                        li.onclick = showExpanded;
+                    }
+                    showCollapsed();
+                    function showExpanded() {
+                        const header = document.createElement("h2");
+                        header.textContent = location.name;
+                        const ul = document.createElement("ul");
+                        Object.keys(location).forEach(key => {
+                            const info = location[key];
+                            const detail = document.createElement("li");
+                            detail.innerHTML = `<strong>${key}:</strong> ${info}`;
+                            ul.appendChild(detail);
+                        });
+                        header.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            showCollapsed();
+                        });
+                        li.replaceChildren(header, ul);
+                    }
+
+                    list.appendChild(li);
+                });
+            });
+
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quoted
+{% endblock %}
+
+{% block main %}
+
+<div class="card-group">
+    {% for movie in movies %}
+        <div class="card" style="width: 18rem;">
+
+          <img src={{ movie["#IMG_POSTER"] }} class="card-img-top" alt="Avatar">
+          <div class="card-body">
+            <h5 class="card-title">{{ movie["#AKA"] }}</h5>
+            <p class="card-text">{{ movie["#ACTORS"] }}</p>
+                <button id="favorite-button" data-title="{{ movie["#AKA"] }}" data-image={{ movie["#IMG_POSTER"] }} data-url={{ movie["#IMDB_URL"] }}>Add To Favorites</button>
+            <a href={{ movie["#IMDB_URL"] }} class="btn btn-primary">Go To IMDB</a>
+          </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+<script>
+  var favoriteButtons = document.querySelectorAll('#favorite-button');
+  favoriteButtons.forEach(function(button) {
+      button.addEventListener('click', function(event) {
+          event.preventDefault();
+          var movieTitle = this.dataset.title;
+          var movieImage = this.dataset.image;
+          var movieUrl = this.dataset.url;
+
+          fetch('/add-to-favorites', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  title: movieTitle,
+                  image: movieImage,
+                  url: movieUrl,
+              }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              // Handle the response from the server
+              if (data.success) {
+                  alert('Movie added to favorites!');
+              } else {
+                  alert(data.error);
+              }
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+      });
+  });
+
+</script>
+
+{% endblock %}

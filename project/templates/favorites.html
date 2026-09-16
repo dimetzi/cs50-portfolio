@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Favorites
+{% endblock %}
+
+{% block main %}
+    <main class="container py-5 text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Url</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in favoritemovies %}
+                    <tr>
+                        <td class="border-1">{{ row["title"] }}</td>
+                        <td class="border-1">{{ row["date"] }}</td>
+                        <td class="border-1"><a href={{ row["url"] }}>Link</a></td>
+                        <td class="border-1"><img src={{ row["image"] }} class="img"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

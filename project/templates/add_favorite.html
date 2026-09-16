@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy
+{% endblock %}
+
+{% block main %}
+    <form action="/add_favorite" method="post">
+        <div class="mb-3">
+            <input type="text" autofocus class="form-control mx-auto w-auto" name="title" autofocus autocomplete="off" placeholder="Title">
+        </div>
+        <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+{% endblock %}

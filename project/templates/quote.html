@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <form action="/quote" method="post">
+        <div class="d-flex justify-content-center">
+            <div class="input-group w-auto">
+                <input type="text" autofocus name="title" autocomplete="off" placeholder="Type title of movie">
+                <button class="btn btn-primary" type="submit">Quote</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
